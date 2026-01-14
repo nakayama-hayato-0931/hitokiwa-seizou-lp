@@ -105,4 +105,93 @@ document.addEventListener('DOMContentLoaded', () => {
             header.setAttribute('aria-expanded', !isExpanded);
         });
     });
+
+    // Contact Form Submission
+    const contactForm = document.querySelector('.contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Reset error messages
+            const formGroups = contactForm.querySelectorAll('.form-group');
+            formGroups.forEach(group => group.classList.remove('error'));
+
+            // Basic Validation
+            let isValid = true;
+            const requiredFields = contactForm.querySelectorAll('[required]');
+
+            requiredFields.forEach(field => {
+                if (field.type === 'radio') {
+                    const name = field.getAttribute('name');
+                    const checked = contactForm.querySelector(`input[name="${name}"]:checked`);
+                    if (!checked) {
+                        field.closest('.form-group').classList.add('error');
+                        isValid = false;
+                    }
+                } else if (field.type === 'checkbox') {
+                    if (!field.checked) {
+                        field.closest('.form-group').classList.add('error');
+                        isValid = false;
+                    }
+                } else {
+                    if (!field.value.trim()) {
+                        field.closest('.form-group').classList.add('error');
+                        isValid = false;
+                    }
+                }
+            });
+
+            if (!isValid) {
+                const firstError = contactForm.querySelector('.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+
+            // Prepare Data
+            const formData = new FormData(contactForm);
+            const data = Object.fromEntries(formData.entries());
+
+            // Loading State
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = '送信中...';
+
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Success
+                    contactForm.innerHTML = `
+                        <div class="form-success-message" style="text-align: center; padding: 40px 0;">
+                            <div style="font-size: 3rem; margin-bottom: 20px;">✅</div>
+                            <h3 style="margin-bottom: 10px;">お問い合わせありがとうございます</h3>
+                            <p>内容を確認の上、担当者よりご連絡させていただきます。</p>
+                        </div>
+                    `;
+                } else {
+                    // Error from API
+                    alert(result.error || '送信に失敗しました。時間をおいて再度お試しください。');
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                alert('通信エラーが発生しました。ネットワーク状況を確認してください。');
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
+                }
+            }
+        });
+    }
 });
