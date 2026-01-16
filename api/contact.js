@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
             },
             body: JSON.stringify({
                 from: 'hitokiwa <onboarding@resend.dev>',
-                to: ['n.hayato.0931@gmail.com'],
+                to: ['matsuo.ac@gmail.com'],
                 subject: `【お問い合わせ】${name}様より`,
                 html: `
           <h3>新しいお問い合わせがありました</h3>
