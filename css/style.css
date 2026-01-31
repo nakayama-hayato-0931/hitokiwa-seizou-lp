@@ -669,27 +669,91 @@ img {
     border-radius: 50px;
 }
 
+/* Carousel Indicators */
+.carousel-indicators {
+    display: none;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 10px 0;
+}
+
+.carousel-indicators .indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(0, 102, 204, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carousel-indicators .indicator.active {
+    background-color: var(--primary-color);
+    transform: scale(1.2);
+}
+
+.carousel-indicators .indicator:hover {
+    background-color: var(--primary-color);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .hero-gallery {
         display: flex;
         overflow-x: auto;
         padding-bottom: 20px;
-        gap: 15px;
+        gap: 20px;
         scroll-snap-type: x mandatory;
-        padding-left: 20px;
-        padding-right: 20px;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        padding-left: calc(50% - 140px);
+        padding-right: calc(50% - 140px);
         justify-content: flex-start;
-        /* Reset justification for scroll */
+        /* Hide scrollbar */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .hero-gallery::-webkit-scrollbar {
+        display: none;
     }
 
     .talent-card-vertical {
         min-width: 280px;
-        /* Fixed width for scroll items */
-        scroll-snap-align: start;
+        flex-shrink: 0;
+        scroll-snap-align: center;
         width: 280px;
-        /* Explicit width */
         aspect-ratio: 3/5;
+        /* Fade-in animation */
+        opacity: 0;
+        animation: fadeInCard 0.5s ease forwards;
+    }
+
+    .talent-card-vertical:nth-child(1) { animation-delay: 0.1s; }
+    .talent-card-vertical:nth-child(2) { animation-delay: 0.2s; }
+    .talent-card-vertical:nth-child(3) { animation-delay: 0.3s; }
+    .talent-card-vertical:nth-child(4) { animation-delay: 0.4s; }
+    .talent-card-vertical:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes fadeInCard {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Show indicators on mobile */
+    .carousel-indicators {
+        display: flex;
+    }
+
+    /* Remove stagger effect on mobile */
+    .hero-gallery .talent-card-vertical:nth-child(even) {
+        margin-top: 0;
     }
 
     .hero-stats-row {

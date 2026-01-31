@@ -19,6 +19,74 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Hero Carousel (Mobile)
+    const heroGallery = document.querySelector('.hero-gallery');
+    const indicators = document.querySelectorAll('.carousel-indicators .indicator');
+    const cards = document.querySelectorAll('.hero-gallery .talent-card-vertical');
+
+    if (heroGallery && indicators.length > 0 && cards.length > 0) {
+        // Update indicators based on scroll position
+        const updateIndicators = () => {
+            const scrollLeft = heroGallery.scrollLeft;
+            const cardWidth = cards[0].offsetWidth;
+            const gap = 20; // CSS gap value
+            const containerPadding = heroGallery.offsetWidth / 2 - cardWidth / 2;
+            
+            // Calculate which card is closest to center
+            let activeIndex = 0;
+            let minDistance = Infinity;
+            
+            cards.forEach((card, index) => {
+                const cardCenter = card.offsetLeft - containerPadding + cardWidth / 2;
+                const scrollCenter = scrollLeft + heroGallery.offsetWidth / 2;
+                const distance = Math.abs(cardCenter - scrollCenter);
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    activeIndex = index;
+                }
+            });
+
+            // Update indicator active states
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === activeIndex);
+            });
+        };
+
+        // Scroll to card when indicator is clicked
+        indicators.forEach(indicator => {
+            indicator.addEventListener('click', () => {
+                const index = parseInt(indicator.dataset.index, 10);
+                const targetCard = cards[index];
+                
+                if (targetCard) {
+                    const cardWidth = targetCard.offsetWidth;
+                    const containerPadding = heroGallery.offsetWidth / 2 - cardWidth / 2;
+                    const scrollPosition = targetCard.offsetLeft - containerPadding;
+                    
+                    heroGallery.scrollTo({
+                        left: scrollPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Listen for scroll events (with debounce for performance)
+        let scrollTimeout;
+        heroGallery.addEventListener('scroll', () => {
+            if (scrollTimeout) {
+                window.cancelAnimationFrame(scrollTimeout);
+            }
+            scrollTimeout = window.requestAnimationFrame(() => {
+                updateIndicators();
+            });
+        });
+
+        // Initial update
+        updateIndicators();
+    }
+
     // Smooth Scroll for Anchor Links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
