@@ -31,16 +31,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const cardWidth = cards[0].offsetWidth;
             const gap = 20; // CSS gap value
             const containerPadding = heroGallery.offsetWidth / 2 - cardWidth / 2;
-            
+
             // Calculate which card is closest to center
             let activeIndex = 0;
             let minDistance = Infinity;
-            
+
             cards.forEach((card, index) => {
                 const cardCenter = card.offsetLeft - containerPadding + cardWidth / 2;
                 const scrollCenter = scrollLeft + heroGallery.offsetWidth / 2;
                 const distance = Math.abs(cardCenter - scrollCenter);
-                
+
                 if (distance < minDistance) {
                     minDistance = distance;
                     activeIndex = index;
@@ -58,12 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
             indicator.addEventListener('click', () => {
                 const index = parseInt(indicator.dataset.index, 10);
                 const targetCard = cards[index];
-                
+
                 if (targetCard) {
                     const cardWidth = targetCard.offsetWidth;
                     const containerPadding = heroGallery.offsetWidth / 2 - cardWidth / 2;
                     const scrollPosition = targetCard.offsetLeft - containerPadding;
-                    
+
                     heroGallery.scrollTo({
                         left: scrollPosition,
                         behavior: 'smooth'
@@ -174,40 +174,218 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Contact Form Submission
-    const contactForm = document.querySelector('.contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+    // =====================================
+    // Contact Form Validation & Submission
+    // =====================================
 
-            // Reset error messages
-            const formGroups = contactForm.querySelectorAll('.form-group');
-            formGroups.forEach(group => group.classList.remove('error'));
+    // reCAPTCHA v3 Site Key (replace with actual key in production)
+    const RECAPTCHA_SITE_KEY = 'RECAPTCHA_SITE_KEY';
 
-            // Basic Validation
-            let isValid = true;
-            const requiredFields = contactForm.querySelectorAll('[required]');
+    // Validation Patterns
+    const VALIDATION_PATTERNS = {
+        email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        phone: /^[0-9\-]+$/
+    };
 
-            requiredFields.forEach(field => {
-                if (field.type === 'radio') {
-                    const name = field.getAttribute('name');
-                    const checked = contactForm.querySelector(`input[name="${name}"]:checked`);
-                    if (!checked) {
-                        field.closest('.form-group').classList.add('error');
-                        isValid = false;
-                    }
-                } else if (field.type === 'checkbox') {
-                    if (!field.checked) {
-                        field.closest('.form-group').classList.add('error');
-                        isValid = false;
-                    }
-                } else {
-                    if (!field.value.trim()) {
-                        field.closest('.form-group').classList.add('error');
+    // Error Messages
+    const ERROR_MESSAGES = {
+        required: 'この項目は必須です',
+        email: '有効なメールアドレスを入力してください',
+        phone: '数字とハイフンのみで入力してください',
+        radio: '選択してください',
+        checkbox: 'チェックが必要です',
+        recaptcha: 'reCAPTCHAの検証に失敗しました。ページを再読み込みしてください。'
+    };
+
+    /**
+     * Show error message for a form group
+     * @param {HTMLElement} formGroup - The form group element
+     * @param {string} message - Error message to display
+     */
+    function showError(formGroup, message) {
+        formGroup.classList.add('error');
+        const errorSpan = formGroup.querySelector('.error-message');
+        if (errorSpan) {
+            errorSpan.textContent = message;
+        }
+    }
+
+    /**
+     * Clear error message for a form group
+     * @param {HTMLElement} formGroup - The form group element
+     */
+    function clearError(formGroup) {
+        formGroup.classList.remove('error');
+    }
+
+    /**
+     * Validate email format
+     * @param {string} email - Email to validate
+     * @returns {boolean} - True if valid
+     */
+    function validateEmail(email) {
+        return VALIDATION_PATTERNS.email.test(email);
+    }
+
+    /**
+     * Validate phone format (Japanese: digits and hyphens only)
+     * @param {string} phone - Phone number to validate
+     * @returns {boolean} - True if valid
+     */
+    function validatePhone(phone) {
+        return VALIDATION_PATTERNS.phone.test(phone);
+    }
+
+    /**
+     * Validate a single field
+     * @param {HTMLElement} field - The input field
+     * @returns {boolean} - True if valid
+     */
+    function validateField(field) {
+        const formGroup = field.closest('.form-group');
+        if (!formGroup) return true;
+
+        const value = field.value.trim();
+        const fieldType = field.type;
+        const fieldId = field.id;
+
+        // Radio button validation
+        if (fieldType === 'radio') {
+            const name = field.getAttribute('name');
+            const checked = document.querySelector(`input[name="${name}"]:checked`);
+            if (field.required && !checked) {
+                showError(formGroup, ERROR_MESSAGES.radio);
+                return false;
+            }
+            clearError(formGroup);
+            return true;
+        }
+
+        // Checkbox validation
+        if (fieldType === 'checkbox') {
+            if (field.required && !field.checked) {
+                showError(formGroup, ERROR_MESSAGES.checkbox);
+                return false;
+            }
+            clearError(formGroup);
+            return true;
+        }
+
+        // Required field validation
+        if (field.required && !value) {
+            const label = formGroup.querySelector('label');
+            const fieldName = label ? label.textContent.replace('必須', '').trim() : 'この項目';
+            showError(formGroup, `${fieldName}を入力してください`);
+            return false;
+        }
+
+        // Email format validation
+        if (fieldId === 'email' && value && !validateEmail(value)) {
+            showError(formGroup, ERROR_MESSAGES.email);
+            return false;
+        }
+
+        // Phone format validation
+        if (fieldId === 'phone' && value && !validatePhone(value)) {
+            showError(formGroup, ERROR_MESSAGES.phone);
+            return false;
+        }
+
+        clearError(formGroup);
+        return true;
+    }
+
+    /**
+     * Validate entire form
+     * @param {HTMLFormElement} form - The form element
+     * @returns {boolean} - True if all fields are valid
+     */
+    function validateForm(form) {
+        let isValid = true;
+        const fields = form.querySelectorAll('input, textarea, select');
+
+        // Track validated radio groups to avoid duplicate validation
+        const validatedRadioGroups = new Set();
+
+        fields.forEach(field => {
+            if (field.type === 'radio') {
+                const name = field.getAttribute('name');
+                if (!validatedRadioGroups.has(name)) {
+                    validatedRadioGroups.add(name);
+                    if (!validateField(field)) {
                         isValid = false;
                     }
                 }
+            } else if (field.type !== 'hidden') {
+                if (!validateField(field)) {
+                    isValid = false;
+                }
+            }
+        });
+
+        return isValid;
+    }
+
+    /**
+     * Get reCAPTCHA token
+     * @returns {Promise<string|null>} - Token or null if failed
+     */
+    async function getRecaptchaToken() {
+        try {
+            if (typeof grecaptcha === 'undefined') {
+                console.warn('reCAPTCHA not loaded');
+                return null;
+            }
+
+            await new Promise(resolve => grecaptcha.ready(resolve));
+            const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'contact_form' });
+            return token;
+        } catch (error) {
+            console.error('reCAPTCHA error:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Setup real-time validation listeners
+     * @param {HTMLFormElement} form - The form element
+     */
+    function setupRealtimeValidation(form) {
+        const fields = form.querySelectorAll('input, textarea, select');
+
+        fields.forEach(field => {
+            // Clear error on input
+            field.addEventListener('input', () => {
+                validateField(field);
             });
+
+            // Clear error on change (for radio/checkbox)
+            field.addEventListener('change', () => {
+                validateField(field);
+            });
+
+            // Validate on blur
+            field.addEventListener('blur', () => {
+                validateField(field);
+            });
+        });
+    }
+
+    // Contact Form Submission
+    const contactForm = document.querySelector('.contact-form');
+    if (contactForm) {
+        // Setup real-time validation
+        setupRealtimeValidation(contactForm);
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Reset all error messages
+            const formGroups = contactForm.querySelectorAll('.form-group');
+            formGroups.forEach(group => clearError(group));
+
+            // Validate form
+            const isValid = validateForm(contactForm);
 
             if (!isValid) {
                 const firstError = contactForm.querySelector('.error');
@@ -215,6 +393,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
                 return;
+            }
+
+            // Get reCAPTCHA token
+            const recaptchaToken = await getRecaptchaToken();
+            if (!recaptchaToken) {
+                alert(ERROR_MESSAGES.recaptcha);
+                return;
+            }
+
+            // Set token to hidden field
+            const recaptchaInput = document.getElementById('recaptcha-token');
+            if (recaptchaInput) {
+                recaptchaInput.value = recaptchaToken;
             }
 
             // Prepare Data
