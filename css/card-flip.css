@@ -33,3 +33,17 @@
 .talent-card-flip-back {
     transform: rotateY(180deg);
 }
+
+/* ===== 改行制御（PC / SP）===== */
+
+/* PCでは sp-only を無効化 */
+.sp-only {
+    display: none;
+}
+
+/* スマホだけ sp-only を有効化 */
+@media (max-width: 768px) {
+    .sp-only {
+        display: inline;
+    }
+}

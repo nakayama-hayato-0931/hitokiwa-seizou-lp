@@ -1,218 +1,130 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Hamburger Menu
+    // Mobile Menu Toggle
     const hamburger = document.querySelector('.hamburger');
     const mobileMenu = document.querySelector('.mobile-menu');
+    const mobileMenuLinks = document.querySelectorAll('.mobile-menu a');
 
     if (hamburger && mobileMenu) {
         hamburger.addEventListener('click', () => {
             hamburger.classList.toggle('active');
             mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
         });
 
-        // Close menu when clicking a link
-        const mobileLinks = mobileMenu.querySelectorAll('a');
-        mobileLinks.forEach(link => {
+        mobileMenuLinks.forEach(link => {
             link.addEventListener('click', () => {
                 hamburger.classList.remove('active');
                 mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
             });
         });
     }
 
-    // Hero Carousel (Mobile)
-    const heroGallery = document.querySelector('.hero-gallery');
-    const indicators = document.querySelectorAll('.carousel-indicators .indicator');
-    const cards = document.querySelectorAll('.hero-gallery .talent-card-vertical');
+    // Header Scroll Effect
+    const header = document.querySelector('.site-header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.style.padding = '10px 0';
+            header.style.backgroundColor = 'rgba(255, 255, 255, 0.98)';
+        } else {
+            header.style.padding = '15px 0';
+            header.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+        }
+    });
 
-    if (heroGallery && indicators.length > 0 && cards.length > 0) {
-        // Update indicators based on scroll position
-        const updateIndicators = () => {
-            const scrollLeft = heroGallery.scrollLeft;
-            const cardWidth = cards[0].offsetWidth;
-            const gap = 20; // CSS gap value
-            const containerPadding = heroGallery.offsetWidth / 2 - cardWidth / 2;
+    // Scroll Animations (Intersection Observer)
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
 
-            // Calculate which card is closest to center
-            let activeIndex = 0;
-            let minDistance = Infinity;
-
-            cards.forEach((card, index) => {
-                const cardCenter = card.offsetLeft - containerPadding + cardWidth / 2;
-                const scrollCenter = scrollLeft + heroGallery.offsetWidth / 2;
-                const distance = Math.abs(cardCenter - scrollCenter);
-
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    activeIndex = index;
-                }
-            });
-
-            // Update indicator active states
-            indicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index === activeIndex);
-            });
-        };
-
-        // Scroll to card when indicator is clicked
-        indicators.forEach(indicator => {
-            indicator.addEventListener('click', () => {
-                const index = parseInt(indicator.dataset.index, 10);
-                const targetCard = cards[index];
-
-                if (targetCard) {
-                    const cardWidth = targetCard.offsetWidth;
-                    const containerPadding = heroGallery.offsetWidth / 2 - cardWidth / 2;
-                    const scrollPosition = targetCard.offsetLeft - containerPadding;
-
-                    heroGallery.scrollTo({
-                        left: scrollPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        // Listen for scroll events (with debounce for performance)
-        let scrollTimeout;
-        heroGallery.addEventListener('scroll', () => {
-            if (scrollTimeout) {
-                window.cancelAnimationFrame(scrollTimeout);
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                // Once animated, no need to observe anymore
+                observer.unobserve(entry.target);
             }
-            scrollTimeout = window.requestAnimationFrame(() => {
-                updateIndicators();
-            });
         });
+    }, observerOptions);
 
-        // Initial update
-        updateIndicators();
-    }
+    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+    animatedElements.forEach(el => observer.observe(el));
 
     // Smooth Scroll for Anchor Links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
+            const href = this.getAttribute('href');
+            if (href === '#') return;
 
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                const headerOffset = 80;
-                const elementPosition = targetElement.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            const target = document.querySelector(href);
+            if (target) {
+                e.preventDefault();
+                const headerHeight = document.querySelector('.site-header').offsetHeight;
+                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
 
                 window.scrollTo({
-                    top: offsetPosition,
+                    top: targetPosition,
                     behavior: 'smooth'
                 });
             }
         });
     });
 
-    // Intersection Observer for Scroll Animations
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.15 // Trigger when 15% of the element is visible
-    };
-
-    const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target); // Only animate once
-            }
-        });
-    }, observerOptions);
-
-    // Select elements to animate
-    const animatedElements = document.querySelectorAll('.animate-on-scroll');
-    animatedElements.forEach(el => observer.observe(el));
-    // Anti-Gravity Job Cards 3D Tilt Effect
-    const jobCards = document.querySelectorAll('.job-card');
-
-    // Check if device supports hover
-    const isHoverable = window.matchMedia('(hover: hover)').matches;
-
-    if (isHoverable) {
-        jobCards.forEach(card => {
-            const inner = card.querySelector('.job-card-inner');
-
-            if (!inner) return;
-
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                // Calculate center
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-
-                // Calculate tilt (max +/- 8 degrees)
-                // RotateY is based on X axis movement (left/right)
-                // RotateX is based on Y axis movement (up/down) - inverted
-                const rotateY = ((x - centerX) / centerX) * 8;
-                const rotateX = -((y - centerY) / centerY) * 8;
-
-                // Apply transform (including hover lift/scale)
-                inner.style.transform = `translateY(-15px) scale(1.03) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                // Reset to CSS hover state (or empty to let CSS take over)
-                inner.style.transform = '';
-            });
-        });
-    }
-
     // FAQ Accordion
     const accordionHeaders = document.querySelectorAll('.accordion-header');
     accordionHeaders.forEach(header => {
         header.addEventListener('click', () => {
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
+            const item = header.parentElement;
+            const isOpen = item.classList.contains('active');
+
+            // Optional: Close other items
+            // accordionHeaders.forEach(h => h.parentElement.classList.remove('active'));
+            // accordionHeaders.forEach(h => h.setAttribute('aria-expanded', 'false'));
+
+            if (!isOpen) {
+                item.classList.add('active');
+                header.setAttribute('aria-expanded', 'true');
+            } else {
+                item.classList.remove('active');
+                header.setAttribute('aria-expanded', 'false');
+            }
         });
     });
 
-    // =====================================
-    // Contact Form Validation & Submission
-    // =====================================
+    // --- Contact Form Logic ---
+    const RECAPTCHA_SITE_KEY = 'YOUR_RECAPTCHA_SITE_KEY'; // Need to update this in real env
 
-    // reCAPTCHA v3 Site Key (replace with actual key in production)
-    const RECAPTCHA_SITE_KEY = 'RECAPTCHA_SITE_KEY';
-
-    // Validation Patterns
-    const VALIDATION_PATTERNS = {
-        email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-        phone: /^[0-9\-]+$/
+    const ERROR_MESSAGES = {
+        required: '必須項目です',
+        email: '有効なメールアドレスを入力してください',
+        phone: '有効な電話番号を入力してください（10桁または11桁）',
+        checkbox: 'プライバシーポリシーへの同意が必要です',
+        radio: 'お問い合わせ内容を選択してください',
+        recaptcha: 'reCAPTCHAの認証に失敗しました。ページを更新して再度お試しください。'
     };
 
-    // Error Messages
-    const ERROR_MESSAGES = {
-        required: 'この項目は必須です',
-        email: '有効なメールアドレスを入力してください',
-        phone: '数字とハイフンのみで入力してください',
-        radio: '選択してください',
-        checkbox: 'チェックが必要です',
-        recaptcha: 'reCAPTCHAの検証に失敗しました。ページを再読み込みしてください。'
+    const VALIDATION_PATTERNS = {
+        email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        phone: /^\d{10,11}$/
     };
 
     /**
      * Show error message for a form group
-     * @param {HTMLElement} formGroup - The form group element
-     * @param {string} message - Error message to display
+     * @param {HTMLElement} formGroup - The parent .form-group element
+     * @param {string} message - The error message to display
      */
     function showError(formGroup, message) {
         formGroup.classList.add('error');
-        const errorSpan = formGroup.querySelector('.error-message');
-        if (errorSpan) {
-            errorSpan.textContent = message;
+        const errorDisplay = formGroup.querySelector('.error-message');
+        if (errorDisplay) {
+            errorDisplay.textContent = message;
         }
     }
 
     /**
      * Clear error message for a form group
-     * @param {HTMLElement} formGroup - The form group element
+     * @param {HTMLElement} formGroup - The parent .form-group element
      */
     function clearError(formGroup) {
         formGroup.classList.remove('error');
@@ -228,12 +140,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Validate phone format (Japanese: digits and hyphens only)
+     * Validate phone format (Japanese: digits only, 10-11 digits)
      * @param {string} phone - Phone number to validate
      * @returns {boolean} - True if valid
      */
     function validatePhone(phone) {
-        return VALIDATION_PATTERNS.phone.test(phone);
+        // Remove spaces and hyphens before validation
+        const cleanPhone = phone.replace(/[\s-]/g, '');
+        return VALIDATION_PATTERNS.phone.test(cleanPhone);
     }
 
     /**
@@ -396,17 +310,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Get reCAPTCHA token
-            const recaptchaToken = await getRecaptchaToken();
-            if (!recaptchaToken) {
-                alert(ERROR_MESSAGES.recaptcha);
-                return;
-            }
+            // const recaptchaToken = await getRecaptchaToken();
+            // if (!recaptchaToken) {
+            //     alert(ERROR_MESSAGES.recaptcha);
+            //     return;
+            // }
 
             // Set token to hidden field
-            const recaptchaInput = document.getElementById('recaptcha-token');
-            if (recaptchaInput) {
-                recaptchaInput.value = recaptchaToken;
-            }
+            // const recaptchaInput = document.getElementById('recaptcha-token');
+            // if (recaptchaInput) {
+            //     recaptchaInput.value = recaptchaToken;
+            // }
 
             // Prepare Data
             const formData = new FormData(contactForm);

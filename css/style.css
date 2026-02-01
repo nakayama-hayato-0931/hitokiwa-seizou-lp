@@ -1725,6 +1725,17 @@ img {
         display: none;
     }
 
+    .site-header {
+        position: fixed;
+        top: 0;
+        height: auto;
+        min-height: 56px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        display: flex;
+        align-items: center;
+    }
+
     .hamburger {
         display: block;
     }
@@ -2368,5 +2379,44 @@ img {
     .hero-main-stats {
         flex-direction: row;
         gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-fixed-contact {
+        box-sizing: border-box;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        position: fixed;
+        bottom: calc(16px + env(safe-area-inset-bottom));
+
+        left: 50%;
+        transform: translateX(calc(-50% - 12px));
+        width: calc(100vw - 32px);
+
+        opacity: 1 !important;
+        visibility: visible !important;
+
+        height: 56px;
+        background: #1f3cff;
+        color: #fff;
+        border-radius: 12px;
+
+        z-index: 9999;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, .25);
+    }
+}
+
+/* 改行制御 */
+.sp-only {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .sp-only {
+        display: inline;
     }
 }
