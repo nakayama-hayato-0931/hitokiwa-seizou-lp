@@ -2410,13 +2410,55 @@ img {
     }
 }
 
-/* 改行制御 */
 .sp-only {
     display: none;
 }
 
 @media (max-width: 768px) {
+    .pc-only {
+        display: none;
+    }
+
     .sp-only {
         display: inline;
     }
+}
+
+@media (max-width: 768px) {
+    .stat-inline {
+        display: inline-block;
+        white-space: nowrap;
+    }
+}
+
+.no-break {
+    white-space: nowrap;
+}
+
+/* PC / SP 切り替え */
+.sp-only {
+    display: none;
+}
+
+.pc-only {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .sp-only {
+        display: block;
+    }
+
+    .pc-only {
+        display: none;
+    }
+}
+
+/* 見た目を揃える */
+.section-lead-narrative {
+    line-height: 1.6;
+}
+
+.section-lead-narrative .lead-line {
+    margin: 0;
 }
