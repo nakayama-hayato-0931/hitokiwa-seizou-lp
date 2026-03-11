@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background circle -->
+  <circle cx="100" cy="108" r="80" fill="#EFF6FF"/>
+
+  <!-- Desk -->
+  <rect x="28" y="125" width="144" height="8" rx="3" fill="#475569"/>
+  <rect x="38" y="133" width="6" height="40" rx="2" fill="#334155"/>
+  <rect x="156" y="133" width="6" height="40" rx="2" fill="#334155"/>
+
+  <!-- Documents on desk -->
+  <rect x="70" y="105" width="60" height="22" rx="3" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.5"/>
+  <rect x="74" y="109" width="32" height="2" rx="1" fill="#1E40AF"/>
+  <rect x="74" y="114" width="24" height="2" rx="1" fill="#93C5FD"/>
+  <rect x="74" y="119" width="28" height="2" rx="1" fill="#93C5FD"/>
+  <!-- Photo on doc -->
+  <circle cx="116" cy="116" r="7" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+  <circle cx="116" cy="113" r="3" fill="#93C5FD"/>
+  <path d="M110 120 Q116 116 122 120" fill="#93C5FD"/>
+
+  <!-- LEFT: Interviewer (dark blue suit) -->
+  <rect x="38" y="94" width="38" height="34" rx="7" fill="#1E40AF"/>
+  <rect x="53" y="89" width="8" height="9" rx="3" fill="#FDBA74"/>
+  <circle cx="57" cy="74" r="18" fill="#FDBA74"/>
+  <path d="M39 65 Q57 49 75 65" fill="#1E293B"/>
+  <!-- Tie -->
+  <polygon points="56,94 58,106 60,94" fill="#93C5FD"/>
+
+  <!-- RIGHT: Candidate (light blue) -->
+  <rect x="124" y="94" width="38" height="34" rx="7" fill="#60A5FA"/>
+  <rect x="139" y="89" width="8" height="9" rx="3" fill="#FDBA74"/>
+  <circle cx="143" cy="74" r="18" fill="#FDBA74"/>
+  <path d="M125 65 Q143 49 161 65" fill="#64748B"/>
+
+  <!-- Handshake over desk -->
+  <rect x="76" y="114" width="22" height="10" rx="5" fill="#FDBA74"/>
+  <rect x="102" y="114" width="22" height="10" rx="5" fill="#FDBA74"/>
+  <!-- Clasped hands overlap -->
+  <ellipse cx="100" cy="119" rx="8" ry="5" fill="#FDBA74"/>
+
+  <!-- Stars above (positive interview vibes) -->
+  <path d="M100 36 L103 45 L112 45 L105 51 L108 60 L100 54 L92 60 L95 51 L88 45 L97 45 Z" fill="#FBBF24"/>
+  <path d="M76 48 L78 54 L84 54 L79 58 L81 64 L76 60 L71 64 L73 58 L68 54 L74 54 Z" fill="#FBBF24" opacity="0.55"/>
+  <path d="M124 48 L126 54 L132 54 L127 58 L129 64 L124 60 L119 64 L121 58 L116 54 L122 54 Z" fill="#FBBF24" opacity="0.55"/>
+</svg>

@@ -27,6 +27,7 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     background-color: var(--white);
+    overflow-x: hidden;
 }
 
 a {
@@ -529,11 +530,13 @@ img {
 }
 
 .talent-job {
-    font-size: 2rem;
-    /* Larger */
+    font-size: clamp(1.5rem, 1.8vw, 2rem);
     font-weight: 800;
     margin: 0 0 8px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    word-break: normal;
+    overflow-wrap: break-word;
+    line-height: 1.25;
 }
 
 .talent-age {
@@ -926,7 +929,7 @@ img {
 }
 
 .case-content h3 {
-    font-size: 1.4rem;
+    font-size: 1.25rem;
     margin-bottom: 15px;
     color: var(--secondary-color);
     font-weight: 700;
@@ -1117,35 +1120,44 @@ img {
 }
 
 .flow-lead p {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     line-height: 1.8;
     color: #4b5563;
 }
 
 .flow-horizontal {
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    gap: 12px;
     max-width: 1200px;
     margin: 0 auto;
+    align-items: stretch;
 }
 
 .flow-card-item {
-    flex: 1;
     display: flex;
     flex-direction: column;
+    align-items: stretch;
+}
+
+.flow-arrow {
+    display: flex;
     align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #93C5FD;
+    padding: 0 4px;
+    align-self: center;
+    flex-shrink: 0;
 }
 
 .flow-card {
     background: #fff;
     border: 1px solid #e5e7eb;
-    padding: 60px 30px 45px;
-    width: 390px;
-    min-height: 580px;
-    /* Changed from height: 580px */
-    height: auto;
+    padding: 55px 22px 28px;
+    width: 100%;
+    min-height: auto;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1154,11 +1166,13 @@ img {
     position: relative;
     box-sizing: border-box;
     transition: var(--transition);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
 }
 
 .flow-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.13);
 }
 
 .step-label {
@@ -1167,12 +1181,12 @@ img {
     left: 0;
     background: #111;
     color: #fff;
-    font-size: 1.125rem;
+    font-size: 1.1rem;
     font-weight: 700;
     padding: 6px 12px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
 }
 
 .step-label span {
@@ -1181,32 +1195,30 @@ img {
 
 .flow-icon {
     width: 100%;
-    height: 300px;
+    height: 160px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 30px;
-    padding: 0 20px;
+    margin-bottom: 16px;
+    padding: 0 10px;
     box-sizing: border-box;
     flex-shrink: 0;
-    /* Keep icon area fixed size */
 }
 
 .flow-icon img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 140px;
+    height: 140px;
     object-fit: contain;
     display: block;
 }
 
 .flow-card h3 {
     width: 100%;
-    min-height: 80px;
-    /* Changed from height: 100px */
+    min-height: auto;
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 700;
     color: #111;
     line-height: 1.4;
@@ -1215,20 +1227,10 @@ img {
     padding: 10px 0 0;
 }
 
-.flow-arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: #d1d5db;
-    padding-bottom: 100px;
-    /* Offset for center alignment with icons */
-}
-
 @media (max-width: 1024px) {
     .flow-horizontal {
-        flex-wrap: wrap;
-        gap: 40px;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
     }
 
     .flow-arrow {
@@ -1236,27 +1238,52 @@ img {
     }
 
     .flow-card-item {
-        flex: 0 0 calc(50% - 20px);
+        align-items: center;
     }
 }
 
 @media (max-width: 639px) {
-    .flow-card-item {
-        flex: 0 0 100%;
+    .flow .section-title {
+        font-size: 7vw;
+        white-space: nowrap;
+    }
+
+    .flow-lead p {
+        font-size: 5.5vw;
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: break-word;
+    }
+
+    .flow-horizontal {
+        grid-template-columns: 1fr;
+        gap: 16px;
     }
 
     .flow-card {
         max-width: 100%;
         height: auto;
-        padding: 40px 20px;
+        padding: 44px 18px 22px;
     }
 
     .flow-icon {
-        height: 200px;
+        height: 130px;
+    }
+
+    .flow-icon img {
+        width: 110px;
+        height: 110px;
     }
 
     .flow-card h3 {
-        height: auto;
+        font-size: 1.2rem;
+    }
+
+    .step-label {
+        font-size: 0.95rem;
+    }
+
+    .step-label span {
         font-size: 1.25rem;
     }
 }
@@ -1654,14 +1681,6 @@ img {
 .footer-logo img {
     height: 50px;
     width: auto;
-    /* Make logo white for dark footer if needed, or keep original if it works */
-    /* Since the logo is black text, we might need a white version or a background */
-    /* For now, let's assume the user wants the black logo and we might need to adjust footer bg or use a filter */
-    /* But the user said "text color is black", so maybe the logo is black. */
-    /* If the footer is dark, black logo won't show. Let's add a white background or filter */
-    background-color: white;
-    padding: 5px 10px;
-    border-radius: 4px;
 }
 
 .footer-info p {
@@ -1738,6 +1757,12 @@ img {
 
     .hamburger {
         display: block;
+    }
+
+    .hamburger span {
+        background-color: #1f2937;
+        height: 3px;
+        border-radius: 2px;
     }
 
     .hero-text h1 {
@@ -1880,8 +1905,21 @@ img {
 }
 
 @media (max-width: 768px) {
+    .zero-cost-wrapper {
+        padding: 40px 20px;
+    }
+
     .zero-cost-title {
         font-size: 1.6rem;
+        text-align: center;
+    }
+
+    .zero-cost-title .no-break {
+        white-space: nowrap;
+        display: block;
+        text-align: center;
+        font-size: 1.4rem;
+        letter-spacing: 0;
     }
 
     .highlight-zero {
@@ -2185,7 +2223,6 @@ img {
 .hero-title {
     font-family: 'Inter', sans-serif;
     font-size: 3.3rem;
-    /* 1.5x Larger (was 2.2rem) */
     font-weight: 900;
     color: var(--secondary-color);
     line-height: 1;
@@ -2256,36 +2293,41 @@ img {
 }
 
 .main-stat-label {
+    font-family: 'Noto Sans JP', sans-serif;
     font-size: 1.05rem;
     /* 1.3x Larger (was 0.8rem) */
     font-weight: 700;
     color: #64748b;
     margin-bottom: 4px;
-    letter-spacing: 0.05em;
+    letter-spacing: -0.01em;
 }
 
 .main-stat-value {
-    font-family: var(--font-main);
+    font-family: 'Noto Sans JP', sans-serif;
     font-size: 2.6rem;
-    font-weight: 800;
+    font-weight: 900;
     color: var(--primary-color);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.04em;
 }
 
 .main-stat-unit {
+    font-family: 'Noto Sans JP', sans-serif;
     font-size: 1.2rem;
     /* Scaled up */
     color: #333;
     font-weight: 700;
     margin-left: 3px;
+    letter-spacing: -0.02em;
 }
 
 .stat-suffix {
+    font-family: 'Noto Sans JP', sans-serif;
     font-size: 1rem;
     /* Scaled up */
     color: #666;
     font-weight: 700;
     margin-left: 3px;
+    letter-spacing: -0.02em;
 }
 
 /* Hide divider */
@@ -2362,23 +2404,56 @@ img {
         margin-top: 20px;
     }
 
+    .hero-col-left,
+    .hero-col-center,
+    .hero-col-right {
+        justify-content: center;
+        text-align: center;
+    }
+
     .hero-catch-center {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
+        letter-spacing: -0.04em;
     }
 
     .hero-cta-button {
         flex-direction: column;
         width: 100%;
+        align-items: center;
         gap: 10px;
     }
 
     .hero-cta-button .btn-lg {
-        width: 100%;
+        width: auto;
+        min-width: 240px;
     }
 
     .hero-main-stats {
         flex-direction: row;
-        gap: 20px;
+        gap: 16px;
+        justify-content: flex-start;
+    }
+
+    .main-stat-item {
+        align-items: flex-start;
+    }
+
+    .main-stat-value {
+        font-size: 1.8rem;
+        letter-spacing: -0.03em;
+    }
+
+    .main-stat-label {
+        font-size: 0.8rem;
+        letter-spacing: 0;
+    }
+
+    .main-stat-unit {
+        font-size: 0.95rem;
+    }
+
+    .stat-suffix {
+        font-size: 0.8rem;
     }
 }
 
@@ -2461,4 +2536,12 @@ img {
 
 .section-lead-narrative .lead-line {
     margin: 0;
+}
+
+/* PC only: Card1・Card2 の talent-job サイズ指定 */
+@media (min-width: 769px) {
+    .hero-gallery .talent-card-vertical:nth-child(1) .talent-job,
+    .hero-gallery .talent-card-vertical:nth-child(2) .talent-job {
+        font-size: 1.7rem;
+    }
 }

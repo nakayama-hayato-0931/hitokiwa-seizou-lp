@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background circle -->
+  <circle cx="100" cy="108" r="80" fill="#EFF6FF"/>
+
+  <!-- Desk -->
+  <rect x="30" y="128" width="140" height="8" rx="3" fill="#475569"/>
+  <rect x="42" y="136" width="6" height="36" rx="2" fill="#334155"/>
+  <rect x="152" y="136" width="6" height="36" rx="2" fill="#334155"/>
+
+  <!-- LEFT: Consultant (dark blue suit) -->
+  <rect x="46" y="97" width="32" height="34" rx="7" fill="#1E40AF"/>
+  <rect x="58" y="92" width="8" height="9" rx="3" fill="#FDBA74"/>
+  <circle cx="62" cy="77" r="17" fill="#FDBA74"/>
+  <path d="M45 69 Q62 54 79 69" fill="#1E293B"/>
+  <!-- Tie -->
+  <polygon points="61,97 63,109 65,97" fill="#93C5FD"/>
+  <!-- Left arm holding clipboard -->
+  <line x1="46" y1="110" x2="33" y2="115" stroke="#FDBA74" stroke-width="7" stroke-linecap="round"/>
+  <!-- Clipboard -->
+  <rect x="18" y="97" width="22" height="30" rx="3" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.5"/>
+  <rect x="18" y="97" width="22" height="7" rx="3" fill="#3B82F6"/>
+  <rect x="22" y="109" width="14" height="2" rx="1" fill="#93C5FD"/>
+  <rect x="22" y="114" width="10" height="2" rx="1" fill="#93C5FD"/>
+  <rect x="22" y="119" width="13" height="2" rx="1" fill="#93C5FD"/>
+  <rect x="22" y="124" width="9" height="2" rx="1" fill="#93C5FD"/>
+
+  <!-- RIGHT: Client (light blue shirt) -->
+  <rect x="122" y="97" width="32" height="34" rx="7" fill="#60A5FA"/>
+  <rect x="134" y="92" width="8" height="9" rx="3" fill="#FDBA74"/>
+  <circle cx="138" cy="77" r="17" fill="#FDBA74"/>
+  <path d="M121 69 Q138 54 155 69" fill="#64748B"/>
+
+  <!-- Speech bubble (center-top) -->
+  <rect x="74" y="38" width="52" height="30" rx="10" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.5"/>
+  <!-- Tail toward left person -->
+  <path d="M82 67 L75 79 L95 68" fill="#FFFFFF"/>
+  <line x1="82" y1="67" x2="75" y2="79" stroke="#3B82F6" stroke-width="1.5"/>
+  <line x1="75" y1="79" x2="95" y2="68" stroke="#3B82F6" stroke-width="1.5"/>
+  <!-- Dots in bubble -->
+  <circle cx="90" cy="53" r="3.5" fill="#3B82F6"/>
+  <circle cx="100" cy="53" r="3.5" fill="#3B82F6"/>
+  <circle cx="110" cy="53" r="3.5" fill="#3B82F6"/>
+</svg>

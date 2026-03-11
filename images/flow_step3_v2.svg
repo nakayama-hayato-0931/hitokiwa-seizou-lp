@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background circle -->
+  <circle cx="100" cy="108" r="80" fill="#EFF6FF"/>
+
+  <!-- Presentation board -->
+  <rect x="60" y="36" width="108" height="112" rx="5" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.5"/>
+  <!-- Board header bar -->
+  <rect x="60" y="36" width="108" height="11" rx="5" fill="#1E40AF"/>
+  <!-- Board stand legs -->
+  <line x1="114" y1="148" x2="107" y2="166" stroke="#475569" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="114" y1="148" x2="121" y2="166" stroke="#475569" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- Candidate card 1 (top-left) -->
+  <rect x="66" y="53" width="42" height="38" rx="3" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1"/>
+  <circle cx="78" cy="65" r="9" fill="#FDBA74"/>
+  <rect x="92" y="62" width="12" height="2" rx="1" fill="#1E40AF"/>
+  <rect x="92" y="67" width="10" height="2" rx="1" fill="#93C5FD"/>
+  <rect x="68" y="80" width="36" height="2" rx="1" fill="#1E40AF"/>
+  <rect x="70" y="85" width="30" height="2" rx="1" fill="#93C5FD"/>
+
+  <!-- Candidate card 2 (top-right) HIGHLIGHTED with star -->
+  <rect x="114" y="53" width="47" height="38" rx="3" fill="#DBEAFE" stroke="#3B82F6" stroke-width="2"/>
+  <circle cx="127" cy="65" r="9" fill="#FDBA74"/>
+  <rect x="140" y="62" width="16" height="2" rx="1" fill="#1E40AF"/>
+  <rect x="140" y="67" width="12" height="2" rx="1" fill="#93C5FD"/>
+  <rect x="116" y="80" width="41" height="2" rx="1" fill="#1E40AF"/>
+  <rect x="118" y="85" width="35" height="2" rx="1" fill="#93C5FD"/>
+  <!-- Star badge -->
+  <path d="M156 53 L158 59 L164 59 L159 63 L161 69 L156 65 L151 69 L153 63 L148 59 L154 59 Z" fill="#FBBF24"/>
+
+  <!-- Candidate card 3 (bottom, wide) -->
+  <rect x="66" y="98" width="95" height="38" rx="3" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1"/>
+  <circle cx="80" cy="115" r="9" fill="#FDBA74"/>
+  <rect x="94" y="109" width="55" height="2" rx="1" fill="#1E40AF"/>
+  <rect x="94" y="115" width="42" height="2" rx="1" fill="#93C5FD"/>
+  <rect x="94" y="121" width="48" height="2" rx="1" fill="#93C5FD"/>
+  <rect x="94" y="127" width="38" height="2" rx="1" fill="#BFDBFE"/>
+
+  <!-- Presenter (left side) -->
+  <rect x="18" y="96" width="32" height="34" rx="7" fill="#1E40AF"/>
+  <rect x="30" y="91" width="8" height="9" rx="3" fill="#FDBA74"/>
+  <circle cx="34" cy="77" r="17" fill="#FDBA74"/>
+  <path d="M17 69 Q34 54 51 69" fill="#1E293B"/>
+  <!-- Pointing arm -->
+  <line x1="50" y1="105" x2="63" y2="92" stroke="#FDBA74" stroke-width="8" stroke-linecap="round"/>
+  <!-- Pointer -->
+  <line x1="62" y1="93" x2="74" y2="78" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="75" cy="77" r="3" fill="#3B82F6"/>
+</svg>
