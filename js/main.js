@@ -93,7 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Contact Form Logic ---
-    const RECAPTCHA_SITE_KEY = 'YOUR_RECAPTCHA_SITE_KEY'; // Need to update this in real env
+    // reCAPTCHA サイトキーをHTMLのscriptタグから自動取得
+    const recaptchaScript = document.querySelector('script[src*="recaptcha"]');
+    const RECAPTCHA_SITE_KEY = recaptchaScript
+        ? new URL(recaptchaScript.src).searchParams.get('render')
+        : null;
 
     const ERROR_MESSAGES = {
         required: '必須項目です',
@@ -309,18 +313,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Get reCAPTCHA token
-            // const recaptchaToken = await getRecaptchaToken();
-            // if (!recaptchaToken) {
-            //     alert(ERROR_MESSAGES.recaptcha);
-            //     return;
-            // }
+            // reCAPTCHA トークン取得
+            const recaptchaToken = await getRecaptchaToken();
+            if (!recaptchaToken) {
+                alert(ERROR_MESSAGES.recaptcha);
+                return;
+            }
 
-            // Set token to hidden field
-            // const recaptchaInput = document.getElementById('recaptcha-token');
-            // if (recaptchaInput) {
-            //     recaptchaInput.value = recaptchaToken;
-            // }
+            // hidden フィールドにセット
+            const recaptchaInput = document.getElementById('recaptcha-token');
+            if (recaptchaInput) {
+                recaptchaInput.value = recaptchaToken;
+            }
 
             // Prepare Data
             const formData = new FormData(contactForm);
