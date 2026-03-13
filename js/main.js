@@ -348,14 +348,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
 
                 if (response.ok) {
-                    // Success
-                    contactForm.innerHTML = `
-                        <div class="form-success-message" style="text-align: center; padding: 40px 0;">
-                            <div style="font-size: 3rem; margin-bottom: 20px;">✅</div>
-                            <h3 style="margin-bottom: 10px;">お問い合わせありがとうございます</h3>
-                            <p>内容を確認の上、担当者よりご連絡させていただきます。</p>
-                        </div>
-                    `;
+                    // サンクスページへリダイレクト
+                    window.location.href = '/thanks';
                 } else {
                     // Error from API
                     alert(result.error || '送信に失敗しました。時間をおいて再度お試しください。');
