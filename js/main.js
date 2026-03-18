@@ -348,6 +348,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
 
                 if (response.ok) {
+                    // GTM カスタムイベント送信
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push({ event: 'form_submit_success' });
                     // サンクスページへリダイレクト
                     window.location.href = '/thanks';
                 } else {
