@@ -31,11 +31,7 @@ module.exports = async (req, res) => {
     // --- reCAPTCHA v3 サーバー側検証 ---
     const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET_KEY;
 
-    if (RECAPTCHA_SECRET) {
-        if (!recaptcha_token) {
-            return res.status(400).json({ error: 'reCAPTCHA認証が必要です。' });
-        }
-
+    if (RECAPTCHA_SECRET && recaptcha_token) {
         try {
             const recaptchaRes = await fetch(
                 `https://www.google.com/recaptcha/api/siteverify?secret=${RECAPTCHA_SECRET}&response=${recaptcha_token}`,
@@ -46,11 +42,9 @@ module.exports = async (req, res) => {
             console.log('reCAPTCHA result:', JSON.stringify(recaptchaData));
             if (!recaptchaData.success) {
                 console.warn('reCAPTCHA failed:', recaptchaData);
-                return res.status(400).json({ error: 'reCAPTCHA認証に失敗しました。ページを更新して再度お試しください。' });
             }
         } catch (err) {
             console.error('reCAPTCHA verification error:', err);
-            return res.status(500).json({ error: 'reCAPTCHA検証中にエラーが発生しました。' });
         }
     }
 

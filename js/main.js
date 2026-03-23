@@ -313,16 +313,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // reCAPTCHA トークン取得
+            // reCAPTCHA トークン取得（失敗してもフォーム送信を続行）
             const recaptchaToken = await getRecaptchaToken();
-            if (!recaptchaToken) {
-                alert(ERROR_MESSAGES.recaptcha);
-                return;
-            }
-
-            // hidden フィールドにセット
             const recaptchaInput = document.getElementById('recaptcha-token');
-            if (recaptchaInput) {
+            if (recaptchaInput && recaptchaToken) {
                 recaptchaInput.value = recaptchaToken;
             }
 
