@@ -91,7 +91,7 @@ module.exports = async (req, res) => {
                 'Authorization': `Bearer ${RESEND_API_KEY}`,
             },
             body: JSON.stringify({
-                from: 'hitokiwa <contact@hito-kiwa.co.jp>',
+                from: 'hitokiwa <onboarding@resend.dev>',
                 to: ['matsuo.ac@gmail.com', 'hitokiwa.info@gmail.com'],
                 subject: `【お問い合わせ】${name}様より`,
                 html: `
@@ -109,7 +109,7 @@ module.exports = async (req, res) => {
                 'Authorization': `Bearer ${RESEND_API_KEY}`,
             },
             body: JSON.stringify({
-                from: 'hitokiwa <contact@hito-kiwa.co.jp>',
+                from: 'hitokiwa <onboarding@resend.dev>',
                 to: [email],
                 subject: `【hitokiwa】お問い合わせありがとうございます`,
                 html: `
