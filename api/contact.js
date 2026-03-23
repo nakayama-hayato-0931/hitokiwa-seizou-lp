@@ -43,8 +43,8 @@ module.exports = async (req, res) => {
             );
             const recaptchaData = await recaptchaRes.json();
 
-            // スコア 0.5未満はボットと判定
-            if (!recaptchaData.success || recaptchaData.score < 0.5) {
+            // スコア 0.3未満はボットと判定
+            if (!recaptchaData.success || recaptchaData.score < 0.3) {
                 console.warn('reCAPTCHA failed:', recaptchaData);
                 return res.status(400).json({ error: 'reCAPTCHA認証に失敗しました。ページを更新して再度お試しください。' });
             }
